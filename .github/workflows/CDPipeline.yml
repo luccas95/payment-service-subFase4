@@ -40,4 +40,3 @@ jobs:
         run: kubectl rollout restart deployment payment-service
         env:
           KUBECONFIG: kubeconfig
-
