@@ -16,19 +16,6 @@ spec:
     spec:
       containers:
         - name: payment-service
-          image: seu-usuario-dockerhub/payment-service:latest # depois vamos ajustar para sua imagem real
+          image: ${{ secrets.DOCKER_USERNAME }}/payment-service:${{ github.sha }}
           ports:
             - containerPort: 8083
-          env:
-            - name: SPRING_DATASOURCE_URL
-              value: jdbc:postgresql://postgres-service:5432/postgres
-            - name: SPRING_DATASOURCE_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: postgres-secret
-                  key: username
-            - name: SPRING_DATASOURCE_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: postgres-secret
-                  key: password
