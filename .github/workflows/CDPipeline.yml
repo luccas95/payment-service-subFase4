@@ -21,10 +21,12 @@ jobs:
           KUBECONFIG: kubeconfig
 
       - name: Replace placeholders in payment-deployment.yaml
-        shell: bash
+        shell: powershell
         run: |
-          sed -i "s|\${{ secrets.DOCKERHUB_USERNAME }}|${{ secrets.DOCKERHUB_USERNAME }}|g" k8s/payment/payment-deployment.yaml
-          sed -i "s|\${{ github.sha }}|${{ github.sha }}|g" k8s/payment/payment-deployment.yaml
+          (Get-Content k8s/payment/payment-deployment.yaml) `
+          -replace '\$\{\{ secrets\.DOCKERHUB_USERNAME \}\}', '${{ secrets.DOCKERHUB_USERNAME }}' `
+          | ForEach-Object { $_ -replace '\$\{\{ github\.sha \}\}', '${{ github.sha }}' } `
+          | Set-Content k8s/payment/payment-deployment.yaml
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           GITHUB_SHA: ${{ github.sha }}
