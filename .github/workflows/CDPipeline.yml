@@ -20,9 +20,19 @@ jobs:
           KUBECONFIG_CONTENT: ${{ secrets.KUBECONFIG_CONTENT }}
           KUBECONFIG: kubeconfig
 
+      - name: Replace placeholders in payment-deployment.yaml
+        shell: bash
+        run: |
+          sed -i "s|\${{ secrets.DOCKER_USERNAME }}|${{ secrets.DOCKER_USERNAME }}|g" k8s/payment/payment-deployment.yaml
+          sed -i "s|\${{ github.sha }}|${{ github.sha }}|g" k8s/payment/payment-deployment.yaml
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          GITHUB_SHA: ${{ github.sha }}
+          KUBECONFIG: kubeconfig
+
       - name: Apply Kubernetes manifests
         shell: powershell
-        run: kubectl apply -f k8s/sale/ --validate=false
+        run: kubectl apply -f k8s/payment/ --validate=false
         env:
           KUBECONFIG: kubeconfig
 
