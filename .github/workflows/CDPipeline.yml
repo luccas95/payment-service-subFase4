@@ -6,12 +6,9 @@ on:
 
 jobs:
   deploy:
-    name: Deploy Payment Service to K8s
     runs-on: self-hosted
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
       - name: Set up kubeconfig
         shell: powershell
@@ -20,31 +17,19 @@ jobs:
           KUBECONFIG_CONTENT: ${{ secrets.KUBECONFIG_CONTENT }}
           KUBECONFIG: kubeconfig
 
-      - name: Replace placeholders in payment-deployment.yaml
-        shell: powershell
-        run: |
-          (Get-Content k8s/payment/payment-deployment.yaml) `
-          -replace '\$\{\{ secrets\.DOCKERHUB_USERNAME \}\}', '${{ secrets.DOCKERHUB_USERNAME }}' `
-          | ForEach-Object { $_ -replace '\$\{\{ github\.sha \}\}', '${{ github.sha }}' } `
-          | Set-Content k8s/payment/payment-deployment.yaml
-        env:
-          DOCKER_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          GITHUB_SHA: ${{ github.sha }}
-          KUBECONFIG: kubeconfig
-
       - name: Apply Kubernetes manifests
         shell: powershell
         run: kubectl apply -f k8s/payment/ --validate=false
         env:
           KUBECONFIG: kubeconfig
 
-      - name: Restart Payment Service Deployment
+      - name: Restart Deployment
         shell: powershell
         run: kubectl rollout restart deployment payment-service
         env:
           KUBECONFIG: kubeconfig
 
-      - name: Check Deployment rollout status
+      - name: Check rollout status
         shell: powershell
         run: kubectl rollout status deployment payment-service --timeout=180s
         continue-on-error: true
