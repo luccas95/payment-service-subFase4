@@ -2,7 +2,7 @@ name: CD Pipeline
 
 on:
   push:
-    branches: [ "main" ]  # Ou outro branch que você quiser disparar o deploy
+    branches: [ "main" ]
 
 jobs:
   deploy:
@@ -22,6 +22,6 @@ jobs:
 
       - name: Deploy Payment Service manifests
         shell: powershell
-        run: kubectl apply -f k8s/payment/ --validate=false
+        run: kubectl apply -f k8s/sale/ --validate=false
         env:
           KUBECONFIG: kubeconfig
