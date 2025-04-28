@@ -1,0 +1,27 @@
+name: CD Pipeline
+
+on:
+  push:
+    branches: [ "main" ]  # Ou outro branch que você quiser disparar o deploy
+
+jobs:
+  deploy:
+    name: Deploy Payment Service to K8s
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up kubeconfig
+        shell: powershell
+        run: Set-Content -Path kubeconfig -Value $env:KUBECONFIG_CONTENT -Encoding Ascii
+        env:
+          KUBECONFIG_CONTENT: ${{ secrets.KUBECONFIG_CONTENT }}
+          KUBECONFIG: kubeconfig
+
+      - name: Deploy Payment Service manifests
+        shell: powershell
+        run: kubectl apply -f k8s/payment/ --validate=false
+        env:
+          KUBECONFIG: kubeconfig
