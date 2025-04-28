@@ -6,12 +6,9 @@ on:
 
 jobs:
   deploy:
-    name: Deploy Payment Service to K8s
     runs-on: self-hosted
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
       - name: Set up kubeconfig
         shell: powershell
@@ -28,7 +25,7 @@ jobs:
           | ForEach-Object { $_ -replace '\$\{\{ github\.sha \}\}', '${{ github.sha }}' } `
           | Set-Content k8s/payment/payment-deployment.yaml
         env:
-          DOCKER_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           GITHUB_SHA: ${{ github.sha }}
           KUBECONFIG: kubeconfig
 
@@ -38,15 +35,9 @@ jobs:
         env:
           KUBECONFIG: kubeconfig
 
-      - name: Restart Payment Service Deployment
+      - name: Restart Deployment
         shell: powershell
         run: kubectl rollout restart deployment payment-service
         env:
           KUBECONFIG: kubeconfig
 
-      - name: Check Deployment rollout status
-        shell: powershell
-        run: kubectl rollout status deployment payment-service --timeout=180s
-        continue-on-error: true
-        env:
-          KUBECONFIG: kubeconfig
