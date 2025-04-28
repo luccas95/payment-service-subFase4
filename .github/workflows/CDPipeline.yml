@@ -1,4 +1,4 @@
-name: CD Pipeline
+name: CD Payment Service
 
 on:
   push:
@@ -20,8 +20,21 @@ jobs:
           KUBECONFIG_CONTENT: ${{ secrets.KUBECONFIG_CONTENT }}
           KUBECONFIG: kubeconfig
 
-      - name: Deploy Payment Service manifests
+      - name: Apply Kubernetes manifests
         shell: powershell
         run: kubectl apply -f k8s/sale/ --validate=false
+        env:
+          KUBECONFIG: kubeconfig
+
+      - name: Restart Payment Service Deployment
+        shell: powershell
+        run: kubectl rollout restart deployment payment-service
+        env:
+          KUBECONFIG: kubeconfig
+
+      - name: Check Deployment rollout status
+        shell: powershell
+        run: kubectl rollout status deployment payment-service --timeout=180s
+        continue-on-error: true
         env:
           KUBECONFIG: kubeconfig
