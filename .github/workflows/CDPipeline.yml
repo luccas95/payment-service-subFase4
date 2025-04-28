@@ -23,10 +23,10 @@ jobs:
       - name: Replace placeholders in payment-deployment.yaml
         shell: bash
         run: |
-          sed -i "s|\${{ secrets.DOCKER_USERNAME }}|${{ secrets.DOCKER_USERNAME }}|g" k8s/payment/payment-deployment.yaml
+          sed -i "s|\${{ secrets.DOCKERHUB_USERNAME }}|${{ secrets.DOCKERHUB_USERNAME }}|g" k8s/payment/payment-deployment.yaml
           sed -i "s|\${{ github.sha }}|${{ github.sha }}|g" k8s/payment/payment-deployment.yaml
         env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           GITHUB_SHA: ${{ github.sha }}
           KUBECONFIG: kubeconfig
 
