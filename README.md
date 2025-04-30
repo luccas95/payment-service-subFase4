@@ -99,6 +99,14 @@ Acesse:
 http://localhost:8082/swagger-ui.html
 ```
 
+## 🧪 Testes
+
+Para rodar os testes automatizados (se incluídos):
+
+```bash
+./gradlew test
+```
+![Cobertura de Testes](images/Cobertura%20de%20Testes%20-%20payment-service.png)
+
 ---
 
-Desenvolvido por Felipe 🚀
