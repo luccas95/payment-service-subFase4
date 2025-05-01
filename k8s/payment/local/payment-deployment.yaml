@@ -16,7 +16,8 @@ spec:
     spec:
       containers:
         - name: payment-service
-          image: ${{ secrets.DOCKERHUB_USERNAME }}/payment-service:latest
+          image: payment-service:latest
+          imagePullPolicy: Never
           ports:
             - containerPort: 8083
           env:
@@ -42,6 +43,7 @@ spec:
                   key: password
             - name: SPRING_JPA_HIBERNATE_DDL_AUTO
               value: update
+
 ---
 apiVersion: v1
 kind: Service

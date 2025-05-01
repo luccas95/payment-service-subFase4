@@ -32,7 +32,7 @@ public class PaymentController {
     public ResponseEntity<String> simulateWebhook(@RequestBody PaymentWebhookRequest request) {
         webhookPaymentUseCase.execute(request.getPaymentId(), request.getStatus());
 
-        return ResponseEntity.ok("Pagamento confirmado com sucesso");
+        return ResponseEntity.ok("Integração realizada com sucesso");
     }
 
     private PaymentResponse toResponse(Payment payment) {

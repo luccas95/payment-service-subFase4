@@ -23,8 +23,8 @@ public class CreatePaymentUseCase {
         Payment savedPayment = paymentGateway.save(payment);
 
         // Simula a confirmação
-        savedPayment.setStatus(PaymentStatus.CONFIRMED);
-        paymentGateway.save(savedPayment);
+//        savedPayment.setStatus(PaymentStatus.CONFIRMED);
+//        paymentGateway.save(savedPayment);
 
         // Atualiza status da venda
 //        saleClient.updateSaleStatus(savedPayment.getSaleId(), "concluir");

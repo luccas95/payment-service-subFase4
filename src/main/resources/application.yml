@@ -3,10 +3,9 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/payment_db
-    username: postgres
-    password: postgres
-    driver-class-name: org.postgresql.Driver
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/payment_db}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:postgres}
 
   jpa:
     hibernate:
@@ -17,8 +16,11 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
 
 sale-service:
-  url: http://localhost:8082
+  url: ${SALE_SERVICE_URL:http://localhost:8082}
 
 client:
   sale:
-    url: http://localhost:8082
+    url: ${SALE_SERVICE_URL:http://localhost:8082}
+
+
+
