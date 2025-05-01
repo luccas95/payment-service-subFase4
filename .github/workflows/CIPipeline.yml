@@ -10,6 +10,7 @@ on:
 
 jobs:
   build-and-push:
+    name: Build, Test and Docker Push    
     runs-on: ubuntu-latest
 
     steps:
@@ -25,8 +26,14 @@ jobs:
       - name: Dar permissão ao Gradle Wrapper
         run: chmod +x gradlew
 
-      - name: Buildar o projeto
-        run: ./gradlew build -x test
+      - name: Executar testes e gerar cobertura
+        run: ./gradlew clean test jacocoTestReport
+
+      - name: Upload do relatório JaCoCo
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-report
+          path: build/jacocoHtml
 
       - name: Buildar imagem Docker
         run: |
