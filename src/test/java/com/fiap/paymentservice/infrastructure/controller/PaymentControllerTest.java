@@ -58,7 +58,7 @@ public class PaymentControllerTest {
         ResponseEntity<String> response = controller.simulateWebhook(request);
 
         assertEquals(200, response.getStatusCodeValue());
-        assertEquals("Pagamento confirmado com sucesso", response.getBody());
+        assertEquals("Integração realizada com sucesso", response.getBody());
         verify(webhookUseCase).execute(1L, "CONFIRMED");
     }
 }

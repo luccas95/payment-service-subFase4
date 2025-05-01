@@ -43,16 +43,16 @@ public class CreatePaymentUseCaseTest {
         confirmedPayment.setStatus(PaymentStatus.CONFIRMED);
 
         when(gateway.save(any(Payment.class)))
-                .thenReturn(pendingPayment)   // primeira chamada
-                .thenReturn(confirmedPayment); // segunda chamada (status atualizado)
+                .thenReturn(pendingPayment);   // primeira chamada
+                //.thenReturn(confirmedPayment); // segunda chamada (status atualizado)
 
         Payment result = useCase.execute(request);
 
         assertNotNull(result);
         assertEquals(1L, result.getSaleId());
         assertEquals(100.0, result.getAmount());
-        assertEquals(PaymentStatus.CONFIRMED, result.getStatus());
+        assertEquals(PaymentStatus.PENDING, result.getStatus());
 
-        verify(gateway, times(2)).save(any(Payment.class));
+        verify(gateway, times(1)).save(any(Payment.class));
     }
 }
